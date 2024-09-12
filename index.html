@@ -1,6 +1,10 @@
 <html>
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seu Projeto</title>
+  <link rel="stylesheet" href="styles.css">
   <style>
     body,
     html {
@@ -8,6 +12,33 @@
       padding: 0;
       font-family: Arial, sans-serif;
       background-color: #f0f8f0;
+    }
+
+    .container {
+      max-width: 90%;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilos para   
+ telas menores (ex: smartphones) */
+    @media (max-width: 768px) {
+      .container {
+        width: 95%;
+      }
+
+      .input-group {
+        flex-direction: column;
+      }
+
+      .lancamento-item {
+        flex-direction: column;
+      }
+
+      /* Outros ajustes para telas menores */
     }
 
     .container {
@@ -355,7 +386,7 @@
       };
     });
 
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       if (event.target == document.getElementById('modalEditar')) {
         fecharModal();
       }
@@ -366,7 +397,7 @@
 
     document.getElementById('btnConfirmarSenha').onclick = verificarSenha;
 
-    document.getElementById('senha').addEventListener('keypress', function(e) {
+    document.getElementById('senha').addEventListener('keypress', function (e) {
       if (e.key === 'Enter') {
         verificarSenha();
       }
@@ -375,4 +406,6 @@
     // Inicializar a lista
     atualizarLista();
   </script>
-</body></html>
+</body>
+
+</html>
