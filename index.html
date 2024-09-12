@@ -207,66 +207,172 @@
     </div>
   </div>
 
+  <!-- Modal de Senha -->
+  <div id="modalSenha" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Insira a Senha</h2>
+      <div class="input-group">
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" required>
+      </div>
+      <button id="btnConfirmarSenha">Confirmar</button>
+    </div>
+  </div>
+
   <script>
     let lancamentos = [
+      { servico: "Diferença do saldo de serviço anterior + 2 aguas", data: "2024-07-25", valor: 17.00 },
+      { servico: "Marcos", data: "2024-08-05", valor: 68.00 },
+      { servico: "Marcos, Daniel, Matheus", data: "2024-08-15", valor: 135.00 },
+      { servico: "Marcos", data: "2024-08-27", valor: 68.00 },
+      { servico: "Marcos", data: "2024-09-04", valor: 65.00 },
+      { servico: "Marcos", data: "2024-09-12", valor: 65.00 }
     ];
     let saldoInicial = 1275.00;
     let indiceEmEdicao = -1;
-    const senhaCorreta = "5819"; // Defina a senha correta aqui
+    let acaoAposAutenticacao = null;
 
     function atualizarLista() {
+      const lista = document.getElementById('listaLancamentos');
+      lista.innerHTML = '';
+      lancamentos.forEach((lancamento, index) => {
+        const li = document.createElement('li');
+        li.className = 'lancamento-item';
+        li.innerHTML = `
+          <div class="lancamento-info">
+            <strong>${lancamento.servico}</strong> - 
+            ${formatarData(lancamento.data)} - 
+            R$ ${lancamento.valor.toFixed(2)}
+          </div>
+          <div class="lancamento-acoes">
+            <button class="btn-editar" onclick="solicitarSenha('editar', ${index})">Editar</button>
+            <button class="btn-remover" onclick="solicitarSenha('remover', ${index})">Remover</button>
+          </div>
+        `;
+        lista.appendChild(li);
+      });
+      atualizarSaldo();
     }
 
     function formatarData(dataString) {
+      const [ano, mes, dia] = dataString.split('-');
+      return `${dia}/${mes}/${ano}`;
     }
 
     function atualizarSaldo() {
+      const totalUsado = lancamentos.reduce((acc, lancamento) => acc + lancamento.valor, 0);
+      const saldoAtual = saldoInicial - totalUsado;
+      document.getElementById('saldoTotal').innerText = `Saldo Atual: R$ ${saldoAtual.toFixed(2)}`;
     }
 
     function adicionarLancamento() {
+      const servico = document.getElementById('servico').value;
+      const data = document.getElementById('data').value;
+      const valor = parseFloat(document.getElementById('valor').value);
+
+      if (servico && data && !isNaN(valor)) {
+        lancamentos.push({ servico, data, valor });
+        atualizarLista();
+        // Limpar campos
+        document.getElementById('servico').value = '';
+        document.getElementById('data').value = '';
+        document.getElementById('valor').value = '';
+      } else {
+        alert('Por favor, preencha todos os campos corretamente.');
+      }
+    }
+
+    function solicitarSenha(acao, index) {
+      acaoAposAutenticacao = () => {
+        if (acao === 'editar') {
+          editarLancamento(index);
+        } else if (acao === 'remover') {
+          removerLancamento(index);
+        }
+      };
+      document.getElementById('modalSenha').style.display = 'block';
+      document.getElementById('senha').focus();
+    }
+
+    function verificarSenha() {
+      const senha = document.getElementById('senha').value;
+      if (senha === '5819') {
+        fecharModalSenha();
+        if (acaoAposAutenticacao) {
+          acaoAposAutenticacao();
+          acaoAposAutenticacao = null;
+        }
+      } else {
+        alert('Senha incorreta. Tente novamente.');
+        document.getElementById('senha').value = '';
+      }
     }
 
     function removerLancamento(index) {
-      const senhaInformada = prompt("Digite a senha para remover:");
-      if (senhaInformada === senhaCorreta) {
-        lancamentos.splice(index, 1);
-        atualizarLista();
-      } else {
-        alert("Senha incorreta.");
-      }
+      lancamentos.splice(index, 1);
+      atualizarLista();
     }
 
     function editarLancamento(index) {
-      const senhaInformada = prompt("Digite a senha para editar:");
-      if (senhaInformada === senhaCorreta) {
-        indiceEmEdicao = index;
-        const lancamento = lancamentos[index];
-        document.getElementById('editServico').value = lancamento.servico;
-        document.getElementById('editData').value = lancamento.data;
-        document.getElementById('editValor').value = lancamento.valor;
-        document.getElementById('modalEditar').style.display = 'block';
-      } else {
-        alert("Senha incorreta.");
-      }
+      indiceEmEdicao = index;
+      const lancamento = lancamentos[index];
+      document.getElementById('editServico').value = lancamento.servico;
+      document.getElementById('editData').value = lancamento.data;
+      document.getElementById('editValor').value = lancamento.valor;
+      document.getElementById('modalEditar').style.display = 'block';
     }
 
     function salvarEdicao() {
+      const servico = document.getElementById('editServico').value;
+      const data = document.getElementById('editData').value;
+      const valor = parseFloat(document.getElementById('editValor').value);
+
+      if (servico && data && !isNaN(valor)) {
+        lancamentos[indiceEmEdicao] = { servico, data, valor };
+        atualizarLista();
+        fecharModal();
+      } else {
+        alert('Por favor, preencha todos os campos corretamente.');
+      }
     }
 
     function fecharModal() {
+      document.getElementById('modalEditar').style.display = 'none';
+      indiceEmEdicao = -1;
+    }
+
+    function fecharModalSenha() {
+      document.getElementById('modalSenha').style.display = 'none';
+      document.getElementById('senha').value = '';
     }
 
     // Event listeners
-    document.querySelector('.close').onclick = fecharModal;
-    window.onclick = function (event) {
+    document.querySelectorAll('.close').forEach(el => {
+      el.onclick = () => {
+        fecharModal();
+        fecharModalSenha();
+      };
+    });
+
+    window.onclick = function(event) {
       if (event.target == document.getElementById('modalEditar')) {
         fecharModal();
       }
+      if (event.target == document.getElementById('modalSenha')) {
+        fecharModalSenha();
+      }
     }
+
+    document.getElementById('btnConfirmarSenha').onclick = verificarSenha;
+
+    document.getElementById('senha').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        verificarSenha();
+      }
+    });
 
     // Inicializar a lista
     atualizarLista();
   </script>
-</body>
-
-</html>
+</body></html>
