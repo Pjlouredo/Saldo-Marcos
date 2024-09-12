@@ -1,135 +1,164 @@
-<html><head>
-<style>
-  body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f0f8f0;
-  }
-  .container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-  h1, h2 {     
-    color: #2e7d32;
-  }
-  .logo {
-    display: block;
-    margin: 0 auto 20px;
-    max-width: 200px;
-    height: auto;
-  }
-  .input-group {
-    margin-bottom: 15px;
-  }
-  label {
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
-  }
-  input[type="text"], input[type="date"], input[type="number"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-right: 5px;
-  }
-  button:hover {
-    background-color: #45a049;
-  }
-  .lancamentos {
-    margin-top: 20px;
-  }
-  .lancamento-lista {
-    list-style-type: none;
-    padding: 0;
-  }
-  .lancamento-item {
-    background-color: #e8f5e9;
-    border: 1px solid #a5d6a7;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    padding: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .lancamento-info {
-    flex-grow: 1;
-  }
-  .lancamento-acoes {
-    display: flex;
-    gap: 5px;
-  }
-  .btn-editar {
-    background-color: #FFC107;
-  }
-  .btn-editar:hover {
-    background-color: #FFA000;
-  }
-  .btn-remover {
-    background-color: #f44336;
-  }
-  .btn-remover:hover {
-    background-color: #d32f2f;
-  }
-  .saldo {
-    font-weight: bold;
-    color: #2e7d32;
-    font-size: 1.2em;
-    margin-top: 20px;
-  }
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-  }
-  .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 8px;
-  }
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .close:hover,
-  .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-  }
-</style>
+<html>
+
+<head>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f8f0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1,
+    h2 {
+      color: #2e7d32;
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 20px;
+      max-width: 200px;
+      height: auto;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-right: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .lancamentos {
+      margin-top: 20px;
+    }
+
+    .lancamento-lista {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .lancamento-item {
+      background-color: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .lancamento-info {
+      flex-grow: 1;
+    }
+
+    .lancamento-acoes {
+      display: flex;
+      gap: 5px;
+    }
+
+    .btn-editar {
+      background-color: #FFC107;
+    }
+
+    .btn-editar:hover {
+      background-color: #FFA000;
+    }
+
+    .btn-remover {
+      background-color: #f44336;
+    }
+
+    .btn-remover:hover {
+      background-color: #d32f2f;
+    }
+
+    .saldo {
+      font-weight: bold;
+      color: #2e7d32;
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 8px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+
 <body>
   <div class="container">
     <img src="img/01.png" alt="Barbearia Louredo logo" class="logo">
-    
+
     <div id="novoLancamento">
       <h2>Lançamento</h2>
       <div class="input-group">
@@ -180,102 +209,56 @@
 
   <script>
     let lancamentos = [
-      { servico: "Diferença do saldo de serviço anterior + 2 aguas", data: "2024-07-25", valor: 17.00 },
-      { servico: "Marcos", data: "2024-08-05", valor: 68.00 },
-      { servico: "Marcos, Daniel, Matheus", data: "2024-08-15", valor: 135.00 },
-      { servico: "Marcos", data: "2024-08-27", valor: 68.00 },
-      { servico: "Marcos", data: "2024-09-04", valor: 65.00 },
-      { servico: "Marcos", data: "2024-09-12", valor: 65.00 }
     ];
     let saldoInicial = 1275.00;
     let indiceEmEdicao = -1;
+    const senhaCorreta = "5819"; // Defina a senha correta aqui
 
     function atualizarLista() {
-      const lista = document.getElementById('listaLancamentos');
-      lista.innerHTML = '';
-      lancamentos.forEach((lancamento, index) => {
-        const li = document.createElement('li');
-        li.className = 'lancamento-item';
-        li.innerHTML = `
-          <div class="lancamento-info">
-            <strong>${lancamento.servico}</strong> - 
-            ${formatarData(lancamento.data)} - 
-            R$ ${lancamento.valor.toFixed(2)}
-          </div>
-          <div class="lancamento-acoes">
-            <button class="btn-editar" onclick="editarLancamento(${index})">Editar</button>
-            <button class="btn-remover" onclick="removerLancamento(${index})">Remover</button>
-          </div>
-        `;
-        lista.appendChild(li);
-      });
-      atualizarSaldo();
     }
 
     function formatarData(dataString) {
-      const [ano, mes, dia] = dataString.split('-');
-      return `${dia}/${mes}/${ano}`;
     }
 
     function atualizarSaldo() {
-      const totalUsado = lancamentos.reduce((acc, lancamento) => acc + lancamento.valor, 0);
-      const saldoAtual = saldoInicial - totalUsado;
-      document.getElementById('saldoTotal').innerText = `Saldo Atual: R$ ${saldoAtual.toFixed(2)}`;
     }
 
     function adicionarLancamento() {
-      const servico = document.getElementById('servico').value;
-      const data = document.getElementById('data').value;
-      const valor = parseFloat(document.getElementById('valor').value);
-
-      if (servico && data && !isNaN(valor)) {
-        lancamentos.push({ servico, data, valor });
-        atualizarLista();
-        // Limpar campos
-        document.getElementById('servico').value = '';
-        document.getElementById('data').value = '';
-        document.getElementById('valor').value = '';
-      } else {
-        alert('Por favor, preencha todos os campos corretamente.');
-      }
     }
 
     function removerLancamento(index) {
-      lancamentos.splice(index, 1);
-      atualizarLista();
-    }
-
-    function editarLancamento(index) {
-      indiceEmEdicao = index;
-      const lancamento = lancamentos[index];
-      document.getElementById('editServico').value = lancamento.servico;
-      document.getElementById('editData').value = lancamento.data;
-      document.getElementById('editValor').value = lancamento.valor;
-      document.getElementById('modalEditar').style.display = 'block';
-    }
-
-    function salvarEdicao() {
-      const servico = document.getElementById('editServico').value;
-      const data = document.getElementById('editData').value;
-      const valor = parseFloat(document.getElementById('editValor').value);
-
-      if (servico && data && !isNaN(valor)) {
-        lancamentos[indiceEmEdicao] = { servico, data, valor };
+      const senhaInformada = prompt("Digite a senha para remover:");
+      if (senhaInformada === senhaCorreta) {
+        lancamentos.splice(index, 1);
         atualizarLista();
-        fecharModal();
       } else {
-        alert('Por favor, preencha todos os campos corretamente.');
+        alert("Senha incorreta.");
       }
     }
 
+    function editarLancamento(index) {
+      const senhaInformada = prompt("Digite a senha para editar:");
+      if (senhaInformada === senhaCorreta) {
+        indiceEmEdicao = index;
+        const lancamento = lancamentos[index];
+        document.getElementById('editServico').value = lancamento.servico;
+        document.getElementById('editData').value = lancamento.data;
+        document.getElementById('editValor').value = lancamento.valor;
+        document.getElementById('modalEditar').style.display = 'block';
+      } else {
+        alert("Senha incorreta.");
+      }
+    }
+
+    function salvarEdicao() {
+    }
+
     function fecharModal() {
-      document.getElementById('modalEditar').style.display = 'none';
-      indiceEmEdicao = -1;
     }
 
     // Event listeners
     document.querySelector('.close').onclick = fecharModal;
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       if (event.target == document.getElementById('modalEditar')) {
         fecharModal();
       }
@@ -284,4 +267,6 @@
     // Inicializar a lista
     atualizarLista();
   </script>
-</body></html>
+</body>
+
+</html>
