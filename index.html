@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saldo Marcos</title>
-  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"> 
   <link rel="stylesheet" href="styles.css">
   <style>
     body,
@@ -25,6 +24,8 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
+    /* Estilos para   
+ telas menores (ex: smartphones) */
     @media (max-width: 768px) {
       .container {
         width: 95%;
@@ -37,6 +38,17 @@
       .lancamento-item {
         flex-direction: column;
       }
+
+      /* Outros ajustes para telas menores */
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     h1,
@@ -174,7 +186,6 @@
       cursor: pointer;
     }
   </style>
-</head>
 
 <body>
   <div class="container">
@@ -282,85 +293,118 @@
     }
 
     function atualizarSaldo() {
-      const total = lancamentos.reduce((acc, lancamento) => acc + lancamento.valor, 0);
-      const saldoTotal = saldoInicial + total;
-      document.getElementById('saldoTotal').textContent = `Saldo Atual: R$ ${saldoTotal.toFixed(2)}`;
+      const totalUsado = lancamentos.reduce((acc, lancamento) => acc + lancamento.valor, 0);
+      const saldoAtual = saldoInicial - totalUsado;
+      document.getElementById('saldoTotal').innerText = `Saldo Atual: R$ ${saldoAtual.toFixed(2)}`;
     }
 
     function adicionarLancamento() {
       const servico = document.getElementById('servico').value;
       const data = document.getElementById('data').value;
       const valor = parseFloat(document.getElementById('valor').value);
-      
+
       if (servico && data && !isNaN(valor)) {
         lancamentos.push({ servico, data, valor });
         atualizarLista();
+        // Limpar campos
         document.getElementById('servico').value = '';
         document.getElementById('data').value = '';
         document.getElementById('valor').value = '';
       } else {
-        alert('Preencha todos os campos corretamente.');
+        alert('Por favor, preencha todos os campos corretamente.');
       }
     }
 
     function solicitarSenha(acao, index) {
-      indiceEmEdicao = index;
-      acaoAposAutenticacao = acao;
+      acaoAposAutenticacao = () => {
+        if (acao === 'editar') {
+          editarLancamento(index);
+        } else if (acao === 'remover') {
+          removerLancamento(index);
+        }
+      };
       document.getElementById('modalSenha').style.display = 'block';
+      document.getElementById('senha').focus();
     }
 
-    function salvarEdicao() {
-      const servico = document.getElementById('editServico').value;
-      const data = document.getElementById('editData').value;
-      const valor = parseFloat(document.getElementById('editValor').value);
-      
-      if (servico && data && !isNaN(valor)) {
-        lancamentos[indiceEmEdicao] = { servico, data, valor };
-        atualizarLista();
-        document.getElementById('modalEditar').style.display = 'none';
-      } else {
-        alert('Preencha todos os campos corretamente.');
-      }
-    }
-
-    function removerLancamento() {
-      lancamentos.splice(indiceEmEdicao, 1);
-      atualizarLista();
-      document.getElementById('modalSenha').style.display = 'none';
-    }
-
-    function confirmarSenha() {
-      // Aqui você pode adicionar a verificação real da senha
+    function verificarSenha() {
       const senha = document.getElementById('senha').value;
-      if (senha === '1234') { // Substitua isso pela lógica real de verificação de senha
-        document.getElementById('modalSenha').style.display = 'none';
-        if (acaoAposAutenticacao === 'editar') {
-          abrirModalEdicao();
-        } else if (acaoAposAutenticacao === 'remover') {
-          removerLancamento();
+      if (senha === '5819') {
+        fecharModalSenha();
+        if (acaoAposAutenticacao) {
+          acaoAposAutenticacao();
+          acaoAposAutenticacao = null;
         }
       } else {
-        alert('Senha incorreta.');
+        alert('Senha incorreta. Tente novamente.');
+        document.getElementById('senha').value = '';
       }
     }
 
-    function abrirModalEdicao() {
-      const lancamento = lancamentos[indiceEmEdicao];
+    function removerLancamento(index) {
+      lancamentos.splice(index, 1);
+      atualizarLista();
+    }
+
+    function editarLancamento(index) {
+      indiceEmEdicao = index;
+      const lancamento = lancamentos[index];
       document.getElementById('editServico').value = lancamento.servico;
       document.getElementById('editData').value = lancamento.data;
       document.getElementById('editValor').value = lancamento.valor;
       document.getElementById('modalEditar').style.display = 'block';
     }
 
-    document.querySelectorAll('.close').forEach(span => {
-      span.onclick = () => {
-        document.getElementById('modalEditar').style.display = 'none';
-        document.getElementById('modalSenha').style.display = 'none';
+    function salvarEdicao() {
+      const servico = document.getElementById('editServico').value;
+      const data = document.getElementById('editData').value;
+      const valor = parseFloat(document.getElementById('editValor').value);
+
+      if (servico && data && !isNaN(valor)) {
+        lancamentos[indiceEmEdicao] = { servico, data, valor };
+        atualizarLista();
+        fecharModal();
+      } else {
+        alert('Por favor, preencha todos os campos corretamente.');
+      }
+    }
+
+    function fecharModal() {
+      document.getElementById('modalEditar').style.display = 'none';
+      indiceEmEdicao = -1;
+    }
+
+    function fecharModalSenha() {
+      document.getElementById('modalSenha').style.display = 'none';
+      document.getElementById('senha').value = '';
+    }
+
+    // Event listeners
+    document.querySelectorAll('.close').forEach(el => {
+      el.onclick = () => {
+        fecharModal();
+        fecharModalSenha();
+      };
+    });
+
+    window.onclick = function (event) {
+      if (event.target == document.getElementById('modalEditar')) {
+        fecharModal();
+      }
+      if (event.target == document.getElementById('modalSenha')) {
+        fecharModalSenha();
+      }
+    }
+
+    document.getElementById('btnConfirmarSenha').onclick = verificarSenha;
+
+    document.getElementById('senha').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        verificarSenha();
       }
     });
 
-    document.getElementById('btnConfirmarSenha').onclick = confirmarSenha;
-
+    // Inicializar a lista
     atualizarLista();
   </script>
 </body>
