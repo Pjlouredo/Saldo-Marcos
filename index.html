@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saldo Marcos</title>
-  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"> 
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="styles.css">
   <style>
     body,
@@ -16,7 +16,8 @@
     }
 
     .container {
-      max-width: 90%;
+      width: 95%;
+      max-width: 800px;
       margin: 20px auto;
       padding: 20px;
       background-color: #ffffff;
@@ -24,11 +25,14 @@
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    /* Estilos para   
- telas menores (ex: smartphones) */
     @media (max-width: 768px) {
+      body {
+        font-size: 14px;
+      }
+
       .container {
-        width: 95%;
+        width: 100%;
+        padding: 10px;
       }
 
       .input-group {
@@ -38,17 +42,29 @@
       .lancamento-item {
         flex-direction: column;
       }
-
-      /* Outros ajustes para telas menores */
     }
 
-    .container {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 20px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    @media (max-width: 480px) {
+      body {
+        font-size: 12px;
+      }
+
+      h1,
+      h2 {
+        font-size: 1.5em;
+      }
+
+      .logo {
+        max-width: 150px;
+      }
+
+      .modal-content {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        height: 100%;
+        overflow-y: auto;
+      }
     }
 
     h1,
@@ -75,9 +91,13 @@
 
     input[type="text"],
     input[type="date"],
-    input[type="number"] {
+    input[type="number"],
+    input[type="password"],
+    button {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
       border: 1px solid #ccc;
       border-radius: 4px;
     }
@@ -86,8 +106,6 @@
       background-color: #4CAF50;
       color: white;
       border: none;
-      padding: 10px 15px;
-      border-radius: 4px;
       cursor: pointer;
       transition: background-color 0.3s;
       margin-right: 5px;
@@ -124,6 +142,7 @@
     .lancamento-acoes {
       display: flex;
       gap: 5px;
+      margin-top: 10px;
     }
 
     .btn-editar {
@@ -163,12 +182,11 @@
 
     .modal-content {
       background-color: #fefefe;
-      margin: 15% auto;
+      margin: 10% auto;
       padding: 20px;
       border: 1px solid #888;
-      width: 80%;
+      width: 90%;
       max-width: 500px;
-      border-radius: 8px;
     }
 
     .close {
@@ -186,6 +204,7 @@
       cursor: pointer;
     }
   </style>
+</head>
 
 <body>
   <div class="container">
@@ -253,17 +272,30 @@
   </div>
 
   <script>
-    let lancamentos = [
-      { servico: "Diferença do saldo de serviço anterior + 2 aguas", data: "2024-07-25", valor: 17.00 },
-      { servico: "Marcos", data: "2024-08-05", valor: 68.00 },
-      { servico: "Marcos, Daniel, Matheus", data: "2024-08-15", valor: 135.00 },
-      { servico: "Marcos", data: "2024-08-27", valor: 68.00 },
-      { servico: "Marcos", data: "2024-09-04", valor: 65.00 },
-      { servico: "Marcos", data: "2024-09-12", valor: 65.00 }
-    ];
+    let lancamentos = [];
     let saldoInicial = 1275.00;
     let indiceEmEdicao = -1;
     let acaoAposAutenticacao = null;
+
+    // Carregar dados do localStorage ao iniciar
+    function carregarDados() {
+      const lancamentosLocalStorage = localStorage.getItem('lancamentos');
+      const saldoInicialLocalStorage = localStorage.getItem('saldoInicial');
+
+      if (lancamentosLocalStorage) {
+        lancamentos = JSON.parse(lancamentosLocalStorage);
+      }
+
+      if (saldoInicialLocalStorage) {
+        saldoInicial = parseFloat(saldoInicialLocalStorage);
+      }
+    }
+
+    // Salvar dados no localStorage
+    function salvarDados() {
+      localStorage.setItem('lancamentos', JSON.stringify(lancamentos));
+      localStorage.setItem('saldoInicial', saldoInicial.toString());
+    }
 
     function atualizarLista() {
       const lista = document.getElementById('listaLancamentos');
@@ -285,6 +317,7 @@
         lista.appendChild(li);
       });
       atualizarSaldo();
+      salvarDados(); // Salva os dados após cada atualização
     }
 
     function formatarData(dataString) {
@@ -404,7 +437,8 @@
       }
     });
 
-    // Inicializar a lista
+    // Inicializar a aplicação
+    carregarDados();
     atualizarLista();
   </script>
 </body>
