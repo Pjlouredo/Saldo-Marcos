@@ -253,45 +253,6 @@
   </div>
 
   <script>
-    let lancamentos = []; // Array para armazenar os lançamentos
-      let saldoInicial = 1275.00;
-      let indiceEmEdicao = -1;
-      let acaoAposAutenticacao = null;
-
-      // Função para salvar os lançamentos no Local Storage
-      function salvarLancamentos() {
-        localStorage.setItem('lancamentos', JSON.stringify(lancamentos));
-      }
-
-      // Função para carregar os lançamentos do Local Storage
-      function carregarLancamentos() {
-        const dadosSalvos = localStorage.getItem('lancamentos');
-        if (dadosSalvos) {
-          lancamentos = JSON.parse(dadosSalvos);
-        }
-      }
-
-      function atualizarLista() {
-        const lista = document.getElementById('listaLancamentos');
-        lista.innerHTML = '';
-        lancamentos.forEach((lancamento, index) => {
-          const li = document.createElement('li');
-          li.className = 'lancamento-item';
-          lista.appendChild(li);
-        });
-        atualizarSaldo();
-      }
-
-      // ... outras funções ...
-
-      // Carregar os lançamentos salvos (se houver)
-      carregarLancamentos();
-
-      // Salvar os lançamentos antes de atualizar a lista
-      function adicionarLancamento() {
-        atualizarLista();
-        salvarLancamentos();
-      }
     let lancamentos = [
       { servico: "Diferença do saldo de serviço anterior + 2 aguas", data: "2024-07-25", valor: 17.00 },
       { servico: "Marcos", data: "2024-08-05", valor: 68.00 },
